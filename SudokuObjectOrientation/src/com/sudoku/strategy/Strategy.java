@@ -7,6 +7,5 @@ public interface Strategy {
 	boolean isFinish();
 
 	Grid doStrategy(Grid grid);
-
-
+	
 }

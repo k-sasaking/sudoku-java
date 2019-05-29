@@ -22,7 +22,8 @@ public class Main {
 		// 問題を設定
 		SolveManager sm = new SolveManager();
 		sm.setGrid(input);
-
+		sm.setMode();
+		
 		// 解決
 		sm.solve(false);
 

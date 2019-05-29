@@ -11,42 +11,55 @@ public class Cell {
 	Cell() {
 		predictNumbers = new HashSet<Integer>();
 	}
+	
+	protected void init() {
+		this.setAllPredictNumbers();
+		number = 0;
+	}
 
-	public boolean isEmpty() {
+
+	protected boolean isEmpty() {
 		return number == 0;
 	}
 
-	public boolean isRock() {
+	protected boolean isRock() {
 		return isRock;
 	}
 
-	public void doRock() {
+	protected void doRock() {
 		isRock = true;
 	}
 
-	public void removeRock() {
+	protected void removeRock() {
 		isRock = false;
 	}
 
-	public int getNumber() {
+	protected int getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	protected void setNumber(int number) {
 
-		if(number == 0)
+		if (number == 0)
 			return;
 
-		if (!isRock)
+		if (!isRock) {
 			this.number = number;
+			predictNumbers = new HashSet<Integer>();
+			isRock = true;
+		}
 	}
 
-	public void setAllPredictNumbers() {
+	protected void setAllPredictNumbers() {
 		for (int i = 1; i <= 9; i++) {
 			addPredictNumber(i);
 		}
 	}
 
+	protected HashSet<Integer> getPredict() {
+		return predictNumbers;
+	}
+	
 	public int getPredictCnt() {
 		return predictNumbers.size();
 	}
@@ -70,18 +83,24 @@ public class Cell {
 		return true;
 	}
 
-	public boolean hasPredictNumber(int number) {
+	protected boolean hasPredictNumber(int number) {
 		return predictNumbers.contains(number);
 	}
 
 	public Cell deepCopy(Cell temp) {
 		this.isRock = temp.isRock;
 		this.number = temp.number;
-		temp.predictNumbers.forEach(x->
-			this.predictNumbers.add(x)
-		);
+		temp.predictNumbers.forEach(x -> this.predictNumbers.add(x));
 		return this;
 	}
 
+	public int pollPredictNumber() {
+
+		for (int number : this.predictNumbers) {
+			this.predictNumbers.remove(number);
+			return number;
+		}
+		return -1;
+	}
 
 }

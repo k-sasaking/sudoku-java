@@ -2,6 +2,8 @@ package com.sudoku.main;
 
 import java.util.Scanner;
 
+import com.sudoku.main.Const.CheckType;
+import com.sudoku.main.Const.RunMode;
 import com.sudoku.model.Grid;
 import com.sudoku.strategy.AllCandidateStrategy;
 import com.sudoku.strategy.Strategy;
@@ -9,6 +11,7 @@ import com.sudoku.strategy.Strategy;
 public class SolveManager {
 
 	private Grid grid;
+	private RunMode mode;
 
 	public void setGrid(int[][] input) {
 
@@ -16,12 +19,18 @@ public class SolveManager {
 
 	}
 
+	public void setMode() {
+
+		int command = inputSelectModeCommand();
+		
+	}
+
 	public void solve(boolean auto) {
 
 		while (true) {
 
 			// input user command
-			int command = inputCommand();
+			int command = inputSelectSolveCommand();
 
 			// solve
 			doSolve(command);
@@ -44,6 +53,8 @@ public class SolveManager {
 		System.out.println(Const.RESULT);
 		grid.print();
 		System.out.println();
+		grid.printPredict();
+		System.out.println();
 
 	}
 
@@ -56,19 +67,24 @@ public class SolveManager {
 		System.out.println();
 	}
 
-	public void printMenu() {
+	public void printSelectStrategyMenu() {
 		System.out.println(Const.DO_SOLVE);
-		System.out.println(Const.MENU);
+		System.out.println(Const.STRATEGY_MENU);
 	}
 
-	private int inputCommand() {
+	public void printSelectModeMenu() {
+		System.out.println(Const.DO_MODE);
+		System.out.println(Const.MODE_MENU);
+	}
+	
+	private int inputSelectSolveCommand() {
 
 		int result = -1;
 		while (true) {
 			// print discribe
-			printMenu();
+			printSelectStrategyMenu();
 
-			result = checkCommand();
+			result = checkCommand(Const.CheckType.STRATEGY);
 			if (result != -1)
 				break;
 
@@ -77,8 +93,37 @@ public class SolveManager {
 
 		return result;
 	}
+	
+	private int inputSelectModeCommand() {
 
-	private int checkCommand() {
+		int result = -1;
+		while (true) {
+			// print discribe
+			printSelectModeMenu();
+
+			result = checkCommand(Const.CheckType.MODE);
+			if (result != -1)
+				break;
+
+			printError();
+		}
+
+		return result;
+	}
+	
+	boolean check(CheckType type, int command){
+			
+		switch(type) {
+			case MODE:
+				return (command == 99 || command == 0 || command == 1);
+			case STRATEGY:
+				return (command == 99 || (command >= 0 && command <= 3));
+		}
+		return false;
+	}
+
+
+	private int checkCommand(CheckType type) {
 		Scanner sc = new Scanner(System.in);
 		String command = sc.nextLine();
 		int result = -1;
@@ -88,7 +133,7 @@ public class SolveManager {
 			return -1;
 		}
 
-		if (result == 99 || (result >= 0 && result <= 2)) {
+		if (check(type, result)) {
 			return result;
 		}
 

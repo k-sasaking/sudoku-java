@@ -15,10 +15,8 @@ public class Solve {
 
 	public Grid doAutoSolve() {
 
-		//while(!st.isFinish()) {
-			grid = st.doStrategy(grid);
-		//}
-
+		grid = st.doStrategy(grid);
+		
 		return grid;
 	}
 
